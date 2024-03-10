@@ -2,15 +2,15 @@
 
 ## Setup
 
-### Install virtual environment
+### Step 1: Install virtual environment
 python -m pip install virtualenv
 
-### Use virtual environment #######
+### Step 2: Use virtual environment #######
 python -m venv myenv
 
-### Activate ######
+### Step 3: Activate ######
 .\myenv\Scripts\activate
 
-### install requiremnets ##
+### Step 4: Install requiremnets ##
 pip install -r requirements.txt
 
