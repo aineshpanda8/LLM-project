@@ -42,42 +42,74 @@ question = st.text_input("Enter your question:")
 db = initialize_database()
 
 # Initialize language model
-llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.5)
+llm = ChatOpenAI(model="gpt-4", temperature=0.2)
 
 # Initialize SQL query chain
-SQl_prompt = PromptTemplate.from_template(
-    """You are a SQLite expert. Given an input question, create a syntactically correct SQLite query to run, to answer the input question.
-The "Performance Metrics" column in the database stores a list of three values for each entry: [accuracy, precision, MAE]. To query based on one of these metrics, you will need to use the below query.
-Select json_extract("Performance Metrics", "$[0]") AS accuracy, json_extract("Performance Metrics", "$[1]") as precision, json_extract("Performance Metrics", "$[2]") AS MAE
-For questions about accuracy, focus on the first value in the list. For precision, the second, and for MAE, the third.
-Remember, your query should aim to answer the question with a single SQL statement and limit the results appropriately.
-You MUST double check your query before executing it. If you get an error while executing a query, rewrite the query and try again.
-Never query for all columns from a table. Only query the columns that are needed to answer the question. Wrap each column name in double quotes (") to denote them as delimited identifiers.
-Be careful not to query for columns that do not exist. Also, pay attention to which column is in which table.
-Pay attention to use the date('now') function to get the current date if the question involves "today".
-Only use the following tables:
+# Updated SQL Prompt
+SQl_prompt_updated = PromptTemplate.from_template(
+    """You are a SQLite expert and Machine Learning Engineer. Given an input question, create a syntactically correct SQLite query to run, to answer the input question.
 
-{table_info}.
+    **Important:** 
+    * For questions about detailed performance metrics (accuracy, MAE, recall, precision), **YOU MUST** JOIN the 'models' table with the 'model_metrics_view' (which contains structured performance data) on the MODEL_ID column and **USE ONLY** columns in 'model_metrics_view' to get accuracy, recall, MAE and precsion and also add a WHERE condition based on the model_type .
+    * **YOU MUST check if the model type first based on that as a ML engineer analyse which metric is suitable**
+       * Regression models: Use MAE from model_metrics_view
+       * Classification models: Use accuracy, precision, recall from model_metrics_view.
+    * If the question might yield multiple results, ensure your query returns ALL relevant entries.  Only limit output if the user explicitly asks for a 'best' result.
+    * Remember, your query should aim to answer the question with a single SQL statement and limit the results appropriately. You can order the results to return the most informative data in the database.
+    * **Check Data Availability:** Before providing a final response, ensure that the data referred to in the query (Model_Name, date, company) likely exists in the database. If potential issues are detected, indicate the problem and suggest alternatives for the user instead of executing the query.
+    **Before Execution:** Double-check your query for errors. Is the JOIN with 'model_metrics_view' used when appropriate?  Does the query structure seem likely to return the correct number of results? If you identify any potential issues, rewrite the query and rerun the corrected query. 
 
-Question: {input}
-Provide up to {top_k} SQL variations."""
+**Important:** Pay close attention to relationships between tables and views.  JOIN tables using appropriate conditions.  
+
+    **Schema Summary:**
+    * models table: MODEL_ID, Model_Name, Model_Type, ... 
+    * model_metrics_view: MODEL_ID, recall, precision, accuracy, MAE
+
+    **Example:**  
+    Question: Which models have recall greater than 0.9?
+    SELECT Model_Name 
+         FROM models 
+         JOIN model_metrics_view ON models.MODEL_ID = model_metrics_view.MODEL_ID
+         WHERE Model_type IN ('Multi-Class', 'Classification') and accuracy > 0.9;
+    
+    Question: What is the accuracy of Model 10?
+     SELECT accuracy 
+         FROM models 
+         JOIN model_metrics_view ON models.MODEL_ID = model_metrics_view.MODEL_ID
+         WHERE lower(Model_Name) = 'model 10' and Model_type IN ('Multi-Class', 'Classification');
+    Answer: Model 10 is a Regression model type so it accuracy is not the right metric to calculate performace of the model
+
+    Question: What is the volume of Model A in CCC company ?
+    SELECT Daily_Volume 
+         FROM models 
+         WHERE lower(Model_Name) = 'model a' and lower(Company_Name) == 'ccc';
+    Answer: It seems there is no model named 'Model A' and no company called CCC in the database.  Can you please try with a different model and company name?
+    
+    Only use the following tables: {table_info}.
+    Question: {input}.
+    Generate up to {top_k} SQL queries to answer the question.
+    """
 )
 
-
-# Initialize Chain 1: Generate SQL Query (this part seems correct based on your setup)
-generate_sql_chain = create_sql_query_chain(prompt=SQl_prompt, llm=llm, db=db)
-
-# Initialize SQL execution chain
-execute_query = QuerySQLDataBaseTool(db=db)
-
+# Prompt to answer the questions
 answer_prompt = PromptTemplate.from_template(
-    """Given the following user question, corresponding SQL query, and SQL result, answer the user question.
-    
+    """Given the following user question, corresponding SQL query, and SQL result, answer the user question in conversational tone.
+      If the SQL result is empty, provide a helpful message indicating that no matching data was found.  
+
 Question: {question}
 SQL Query: {query}
 SQL Result: {result}
 Answer: """
 )
+
+
+
+# Initialize Chain 1: Generate SQL Query (this part seems correct based on your setup)
+generate_sql_chain = create_sql_query_chain(prompt=SQl_prompt_updated, llm=llm, db=db)
+
+# Initialize SQL execution chain
+execute_query = QuerySQLDataBaseTool(db=db)
+
 execute_sql_chain = answer_prompt | llm | StrOutputParser()
 
 # Main app logic
