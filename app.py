@@ -81,14 +81,14 @@ st.markdown(
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         transition: 0.3s;
         height: 400px;
-        color: #1c1c1c;
+        color:#00000E;
     }
     .card:hover {
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
     .card > :first-child {
         text-align: center;
-        color: #1c1c1c;
+        color: #00000E;
     }
 
     .stButton button {
