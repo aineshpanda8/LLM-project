@@ -90,9 +90,7 @@ st.markdown(
         text-align: center;
         color: #1c1c1c;
     }
-    .stTextArea textarea {
-        color: #1c1c1c;
-    }
+
     .stButton button {
         background-color: #FDB913;
         color: #1c1c1c;
