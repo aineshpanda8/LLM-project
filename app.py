@@ -22,89 +22,111 @@ ccc_logo = "CCC_Logo_Light_Blue_(1).jpg"  # Replace with the actual file name of
 st.set_page_config(layout="wide", page_icon=":guardsman:", page_title="AIOC Guardian")
 
 # Add custom CSS styles
+# Add custom CSS styles
 st.markdown(
     """
     <style>
-        body {
-            background-color: #E6F1F8;
-            color: #1c1c1c;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .stApp {
-            background-color: #E6F1F8;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            flex: 1;
-        }
-        .navbar {
+    body {
+        background-color: #E6F1F8;
+        color: #1c1c1c;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+    }
+    .stApp {
+        background-color: #C7E3F5;
+        padding: 20px 20px 20px 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        flex: 1;
+        margin-top: 20px; /* Add this line */
+    }
+    .navbar {
             background-color: #0072C6;
-            padding: 20px;
+            padding: 25px;
             color: #FFFFFF;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .footer {
+        .navbar-logo-container {
+            position: absolute;
+            left: 10px;
+        }
+        .navbar-title {
+            font-size: 3rem;
+            text-align: center;
+        }
+    .footer {
             background-color: #0072C6;
             padding: 10px;
             color: #FFFFFF;
             text-align: center;
+            position: fixed; /* Add this line */
+            bottom: 0; /* Add this line */
+            left: 0; /* Add this line */
+            right: 0; /* Add this line */
         }
-        .card {
-            background-color: #FFFFFF;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: 0.3s;
-            height: 400px;
-            color: #1c1c1c;
-        }
-        .card:hover {
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        }
-        .card > :first-child {
-            text-align: center;
-            color: #1c1c1c;
-        }
-        .stTextArea textarea {
-            color: #1c1c1c;
-        }
-        .stButton button {
-            background-color: #FDB913;
-            color: #1c1c1c;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .stButton button:hover {
-            background-color: #FFC72C;
-        }
-        h1, h3 {
-            color: #0072C6;
-        }
-    </style>
+    .card {
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: 0.3s;
+        height: 400px;
+        color: #1c1c1c;
+    }
+    .card:hover {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+    .card > :first-child {
+        text-align: center;
+        color: #1c1c1c;
+    }
+    .stTextArea textarea {
+        color: #1c1c1c;
+    }
+    .stButton button {
+        background-color: #FDB913;
+        color: #1c1c1c;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .stButton button:hover {
+        background-color: #FFC72C;
+    }
+    h1, h3 {
+        color: #0072C6;
+    }
+</style>
     """,
     unsafe_allow_html=True,
 )
 
+ccc_logo_path = os.path.join(os.path.dirname(__file__), "CCC_Logo_Light_Blue_(2)_processed.jpg")
+
 # Add a navigation bar
 st.markdown(
-    """
+    f"""
     <div class="navbar">
-        <h2>AIOC Guardian</h2>
+        <div class="navbar-logo-container">
+            <img src="data:image/jpeg;base64,{base64.b64encode(open(ccc_logo_path, 'rb').read()).decode()}" width="100">
+        </div>
+        <h2 class="navbar-title">AIOC Guardian</h2>
     </div>
     """,
     unsafe_allow_html=True,
 )
-
-col1, col2, col3 = st.columns([1, 2, 1])
-with col1:
-    st.image(ccc_logo, width=100)  # Adjust the width as needed
-    st.write("---")
 
 # User Input Section
 col1, col2 = st.columns([1, 1])
@@ -340,7 +362,7 @@ if generate_sql_button:
 st.markdown(
     """
     <div class="footer">
-        <p>&copy; 2023 CCC Information Services Inc. All rights reserved.</p>
+        <p>&copy; 2024 CCC Information Services Inc. All rights reserved.</p>
     </div>
     """,
     unsafe_allow_html=True,
