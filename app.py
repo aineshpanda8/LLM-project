@@ -7,13 +7,14 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import FewShotPromptTemplate
 from sentence_transformers import SentenceTransformer, util
 import base64
-
+import os
 # Load environment variables
 from dotenv import load_dotenv
 
 from langchain_community.utilities import SQLDatabase
 import pandas as pd
 import sqlite3
+openai_api_key = os.environ.get("OPENAI_API_KEY")
 
 ccc_logo = "CCC_Logo_Light_Blue_(1).jpg"  # Replace with the actual file name of your logo
 
