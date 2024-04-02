@@ -74,15 +74,7 @@ st.markdown(
             left: 0; /* Add this line */
             right: 0; /* Add this line */
         }
-    .card {
-        background-color: #00000E;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        transition: 0.3s;
-        height: 400px;
-        color:#00000E;
-    }
+
     .card:hover {
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
