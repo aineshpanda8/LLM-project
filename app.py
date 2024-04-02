@@ -195,6 +195,34 @@ db = initialize_database()
 # Initialize language model
 llm = ChatOpenAI(model="gpt-4", temperature=0)
 
+view_query = """
+CREATE VIEW model_metrics_view AS
+SELECT
+    MODEL_ID,
+    CASE 
+        WHEN "Model_Type" IN ('Multi-Class', 'Classification') 
+            THEN json_extract("Performance_Metrics", '$[0]')
+    END AS recall,
+    CASE 
+        WHEN "Model_Type" IN ('Multi-Class', 'Classification') 
+            THEN json_extract("Performance_Metrics", '$[1]')
+    END AS precision,
+    CASE 
+        WHEN "Model_Type" IN ('Multi-Class', 'Classification') 
+            THEN json_extract("Performance_Metrics", '$[2]')
+    END AS accuracy,
+    CASE
+        WHEN "Model_type" IN ("Regression")
+             THEN Performance_Metrics
+    END AS MAE
+FROM
+    models;
+"""
+
+# Execute the query to create the view
+db.run(view_query)
+
+
 # Initialize SQL query chain
 base_prompt = PromptTemplate(
     input_variables=["input"],
