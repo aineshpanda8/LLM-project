@@ -9,8 +9,8 @@ from sentence_transformers import SentenceTransformer, util
 import base64
 
 # Load environment variables
-# Load environment variables and initialize the connection to the SQL database
-# Load environment variables
+from dotenv import load_dotenv
+
 from langchain_community.utilities import SQLDatabase
 import pandas as pd
 import sqlite3
