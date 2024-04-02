@@ -27,7 +27,7 @@ st.markdown(
     """
     <style>
     body {
-        background-color: #00000E;
+        background-color: #E6F1F8;
         color: #1c1c1c;
         font-family: Arial, sans-serif;
         display: flex;
@@ -36,7 +36,7 @@ st.markdown(
         margin: 0;
     }
     .stApp {
-        background-color: #00000E;
+        background-color: #C7E3F5;
         padding: 20px 20px 20px 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
