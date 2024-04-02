@@ -15,6 +15,8 @@ from langchain_community.utilities import SQLDatabase
 import pandas as pd
 import sqlite3
 
+load_dotenv()
+
 ccc_logo = "CCC_Logo_Light_Blue_(1).jpg"  # Replace with the actual file name of your logo
 
 # Set app configuration
