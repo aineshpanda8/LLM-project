@@ -215,6 +215,17 @@ SELECT Company_Name, Model_Name, Model_Version, Model_Type, metric
 FROM cte
 WHERE rn = 1;
 
+Question: For models belonging to Nationwide, calculate the average accuracy, precision and recall for 2021
+SELECT 
+    AVG(mv.accuracy) AS Avg_Accuracy,
+    AVG(mv.precision) AS Avg_Precision,
+    AVG(mv.recall) AS Avg_Recall
+FROM models m
+JOIN model_metrics_view mv ON m.MODEL_ID = mv.MODEL_ID
+WHERE m.Company_Name = 'Nationwide'
+  AND m.Model_Type IN ('Multi-Class', 'Classification')
+  AND substr(m.Date, 1, 4) = '2021';
+
 \n Only use the following tables: {table_info}.Question: {input}.Generate up to {top_k} SQL queries to answer the question.""",
 )
 
