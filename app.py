@@ -27,7 +27,7 @@ st.markdown(
     """
     <style>
     body {
-        background-color: #E6F1F8;
+        background-color: #00000E;
         color: #1c1c1c;
         font-family: Arial, sans-serif;
         display: flex;
@@ -36,7 +36,7 @@ st.markdown(
         margin: 0;
     }
     .stApp {
-        background-color: #C7E3F5;
+        background-color: #00000E;
         padding: 20px 20px 20px 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -75,7 +75,7 @@ st.markdown(
             right: 0; /* Add this line */
         }
     .card {
-        background-color: #FFFFFF;
+        background-color: #00000E;
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -104,7 +104,7 @@ st.markdown(
         background-color: #FFC72C;
     }
     h1, h3 {
-        color: #0072C6;
+        color: #00000E;
     }
 </style>
     """,
