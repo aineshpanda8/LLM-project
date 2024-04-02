@@ -9,3 +9,4 @@ python-dotenv
 torch
 langchain-community
 openpyxl
+sentence-transformers
